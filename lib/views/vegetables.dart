@@ -79,7 +79,7 @@ class _VegetablesScreenState extends State<VegetablesScreen> {
                     return DefaultTabController(
                       length: 3,
                       child: GridView.builder(
-                        controller: ProductViewModel.scrollController,
+                        controller: productViewModel.scrollController,
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 2,
                           crossAxisSpacing: 4,

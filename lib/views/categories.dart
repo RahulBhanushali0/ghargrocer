@@ -117,7 +117,7 @@ class _CategoriesState extends State<Categories>
                                               BorderRadius.circular(50),
                                         ),
                                         child: CachedNetworkImage(
-                                          imageUrl: product.imagefrontsmallurl!,
+                                          imageUrl: product.imagefrontsmallurl.toString()!,
                                           width: 40,
                                           height: 40,
                                           filterQuality: FilterQuality.none,

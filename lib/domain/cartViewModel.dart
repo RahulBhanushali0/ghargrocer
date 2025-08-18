@@ -14,13 +14,9 @@ class ShoppingCartViewModel extends GetxController {
   RxMap<String, CartItem> _productCartMap = Map<String, CartItem>().obs;
   Map<String, CartItem> get productCartMap => _productCartMap;
 
-  void dispose() async {
-    _cartController.close();
-    super.dispose();
-  }
-
   @override
   void onClose() async {
+    await _cartController.close();
     super.onClose();
   }
 

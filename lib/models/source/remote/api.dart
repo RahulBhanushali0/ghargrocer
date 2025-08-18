@@ -1,6 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:holmon/models/dto/product.dart';
 
+import '../../../constants/appConstants.dart';
+
 abstract class Api {
   //interface is depend on your api endpoints, your needs...etc
   Api(String appBaseUrl);
@@ -20,7 +22,10 @@ class ApiImpl implements Api {
   Future<List<Product>> loadProductList({required int page}) async {
     try {
       Response response;
-      response = await dio.get(appBaseUrl, queryParameters: {'page': page});
+      dio.options.headers.addAll({
+        'Authorization': AppConstants.authToken,
+      });
+      response = await dio.get(appBaseUrl + AppConstants.fetchAllProdList, queryParameters: {'per_page': 10}, );
       print("responseresponse =>>>>${response}");
 
       dio.interceptors

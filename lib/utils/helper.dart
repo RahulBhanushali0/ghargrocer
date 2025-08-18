@@ -13,26 +13,32 @@ import 'package:holmon/constants/appConstants.dart';
 
 Future initDependencies() async {
   final sharedPreferences = await SharedPreferences.getInstance();
-  Get.lazyPut(() => LocalStorageImpl(sharedPreferences: sharedPreferences));
+  Get.lazyPut(() => LocalStorageImpl(sharedPreferences: sharedPreferences),
+      fenix: true);
 
-  Get.lazyPut(() => ApiImpl(AppConstants.BASE_URL));
+  Get.lazyPut(() => ApiImpl(AppConstants.BASE_URL), fenix: true);
 
   Get.lazyPut(() => ProductRepositoryImpl(
         api: Get.find<ApiImpl>(),
         localStorage: Get.find<LocalStorageImpl>(),
-      ));
+      ), fenix: true);
 
-  Get.lazyPut(() => ProductViewModel(
-      productRepositoryImpl: Get.find<ProductRepositoryImpl>()));
+  Get.lazyPut(
+      () => ProductViewModel(
+          productRepositoryImpl: Get.find<ProductRepositoryImpl>()),
+      fenix: true);
 
-  Get.lazyPut(() => CartLocalStorageImpl(sharedPreferences: sharedPreferences));
+  Get.lazyPut(() => CartLocalStorageImpl(sharedPreferences: sharedPreferences),
+      fenix: true);
 
   Get.lazyPut(() => CartRepositoryImpl(
         cartLocalStorage: Get.find<CartLocalStorageImpl>(),
-      ));
+      ), fenix: true);
 
-  Get.lazyPut(() => ShoppingCartViewModel(
-      cartRepositoryImpl: Get.find<CartRepositoryImpl>()));
+  // Eagerly instantiate ShoppingCartViewModel and keep it permanent
+  Get.put(ShoppingCartViewModel(
+      cartRepositoryImpl: Get.find<CartRepositoryImpl>()),
+      permanent: true);
 
   Get.put(CategorieViewModel());
 

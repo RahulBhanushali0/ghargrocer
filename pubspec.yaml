@@ -37,17 +37,20 @@ dependencies:
   get: ^4.6.5
   cached_network_image: ^3.3.1
   badges: ^3.1.2
-  rxdart: ^0.27.7
+  rxdart: ^0.28.0
   dio: ^5.4.0
   shared_preferences: ^2.2.2
   animated_theme_switcher: ^2.0.10
   flutter_rating_bar: ^4.0.1
-  flutter_email_sender: ^6.0.2
-  photo_view: ^0.14.0
-  flutter_launcher_icons: ^0.13.1
-  connectivity_plus: ^5.0.2
+  flutter_email_sender: ^7.0.0
+  photo_view: ^0.15.0
+  flutter_launcher_icons: ^0.14.4
+  connectivity_plus: ^6.1.5
   lottie: ^3.0.0
   diacritic: ^0.1.5
+  flutter_secure_storage: ^8.0.0
+  flutter_dotenv: ^5.1.0
+
 
 flutter_launcher_icons:
   android: "launcher_icon"

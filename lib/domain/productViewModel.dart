@@ -4,10 +4,14 @@ import 'package:holmon/models/dto/product.dart';
 import 'package:holmon/models/product_repo_Impl.dart';
 import 'package:holmon/utils/myStates.dart';
 
+import '../services/secure_storage_service.dart';
+
 class ProductViewModel extends GetxController {
   ProductRepository _productRepository;
   ProductViewModel({required ProductRepository productRepositoryImpl})
       : _productRepository = productRepositoryImpl;
+  final SecureStorageService _secureStorageService =
+  SecureStorageService(); // Instantiate it
 
   Rx<MyState> _currentState = MyState().obs;
   MyState get currentState => _currentState.value;
@@ -16,6 +20,11 @@ class ProductViewModel extends GetxController {
   List<Product> get productList => _productList;
 
   RxInt page = 1.obs;
+
+  Future<void> logout() async {
+    await _secureStorageService.deleteApiToken();
+    Get.offAllNamed('/registration');
+  }
 
   Future<void> getAllProductList(int page) async {
     try {
@@ -51,10 +60,11 @@ class ProductViewModel extends GetxController {
     return null;
   }
 
-  static final ScrollController scrollController = ScrollController();
+  late final ScrollController scrollController;
   @override
   void onInit() {
     super.onInit();
+    scrollController = ScrollController();
     //getAllProductList(page.value);
     scrollController.addListener(() async {
       if (scrollController.position.maxScrollExtent ==

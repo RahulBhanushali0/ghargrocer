@@ -10,11 +10,14 @@ import 'package:holmon/views/vegetables.dart';
 import 'package:holmon/views/welcome.dart';
 import 'package:holmon/views/categories.dart';
 
+import '../views/otp_verification_screen.dart';
+
 class MyRoutes {
   static final List<GetPage> pages = [
     GetPage(name: '/splash', page: () => SplashScreen()),
     GetPage(name: '/', page: () => WelcomeScreen()),
     GetPage(name: '/registration', page: () => RegistrationScreen()),
+    GetPage(name: '/otpVerification', page: () => OtpVerificationScreen()),
     GetPage(name: '/dashboard', page: () => HomeScreen()),
     GetPage(name: '/home', page: () => DashboardScreen()),
     GetPage(name: '/categories', page: () => Categories()),

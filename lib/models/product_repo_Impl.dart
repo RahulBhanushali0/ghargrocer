@@ -14,11 +14,11 @@ class ProductRepositoryImpl implements ProductRepository {
 
   @override
   Future<List<Product>> getAllProductList({required int page}) async {
-    final cachedList = _localStorage.loadProductList(page: page);
-    print("cachedListcachedList =>>> ${cachedList}");
-    if (cachedList.isNotEmpty) {
-      return cachedList;
-    }
+    // final cachedList = _localStorage.loadProductList(page: page);
+    // print("cachedListcachedList =>>> ${cachedList}");
+    // if (cachedList.isNotEmpty) {
+    //   return cachedList;
+    // }
 
     final fetchedList = await _api.loadProductList(page: page);
     print("fetchedListfetchedList =>>> ${fetchedList}");

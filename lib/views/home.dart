@@ -59,7 +59,6 @@ class _HomeScreenState extends State<HomeScreen>
   void dispose() {
     _pageController.dispose();
     WidgetsBinding.instance.removeObserver(this);
-    shoppingCart.dispose();
     super.dispose();
   }
 

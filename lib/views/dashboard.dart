@@ -99,6 +99,9 @@ class _DashboardScreenState extends State<DashboardScreen>
                               : AppThemes.darkTheme2,
                           isReversed: Get.isDarkMode ? false : true)
                     },
+                    // onTap: () => {
+                    //   productViewModel.logout(),
+                    // },
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16),
                       child: CircleAvatar(
