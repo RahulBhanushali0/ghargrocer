@@ -50,7 +50,7 @@ class VegetableCardWidget extends StatelessWidget {
                 Container(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    product.price ?? "10da",
+                    product.price != null ? "${product.price}₹" : "10da",
                     style: TextStyle(
                       color: Color(0xffFF324B),
                       fontSize: 16,
@@ -73,7 +73,7 @@ class VegetableCardWidget extends StatelessWidget {
                       width: 8,
                     ),
                     Text(
-                      product.discount ?? "20%",
+                      product.discount ?? "",
                       style: TextStyle(
                           color: Color.fromARGB(255, 27, 133, 185),
                           fontSize: 10,
@@ -198,6 +198,7 @@ class VegetableCardWidget extends StatelessWidget {
             imagefrontsmallurl: product.imagefrontsmallurl,
             imagefronturl: product.imagefronturl,
             categories: product.categories,
+            qty: product.qty,
           ));
         },
         child: Image.asset(

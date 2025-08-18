@@ -220,13 +220,14 @@ class _DashboardScreenState extends State<DashboardScreen>
               SizedBox(
                 height: 20,
               ),
-              Padding(
+              Obx(() =>
+                Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 child: SeeAllView(
                     context: context,
-                    name: "Best deals 🔥",
+                    name: "Best deals 🔥${productViewModel.productList.length}",
                     onTapAction: () => Get.toNamed("/vegetables")),
-              ),
+              ),),
               SizedBox(
                 height: 12,
               ),

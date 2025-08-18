@@ -31,8 +31,10 @@ class _VegetableDetailScreenState extends State<VegetableDetailScreen> {
     super.initState();
 
     multiImageProvider = [
-      CachedNetworkImageProvider(product.imagefronturl ?? ''),
-      CachedNetworkImageProvider(product.imagenutritionurl ?? ''),
+      if ((product.imagefronturl ?? '').isNotEmpty)
+        CachedNetworkImageProvider(product.imagefronturl!),
+      if ((product.imagenutritionurl ?? '').isNotEmpty)
+        CachedNetworkImageProvider(product.imagenutritionurl!),
     ];
   }
 
@@ -277,6 +279,7 @@ class _VegetableDetailScreenState extends State<VegetableDetailScreen> {
           imagefrontsmallurl: product.imagefrontsmallurl,
           imagefronturl: product.imagefronturl,
           categories: product.categories,
+          qty: product.qty,
         ))
       },
       style: TextButton.styleFrom(

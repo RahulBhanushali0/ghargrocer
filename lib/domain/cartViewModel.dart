@@ -26,16 +26,21 @@ class ShoppingCartViewModel extends GetxController {
 
   Future<void> addToCart(CartItem cartItem) async {
     try {
-      if (_productCartMap.values.contains(cartItem)) {
-        if (cartItem.itemQuantity < 8) {
-          cartItem.itemQuantity += 1;
+      final String key = cartItem.id.toString();
+      final CartItem? existing = _productCartMap[key];
+      if (existing != null) {
+        final int maxQty = existing.qty ?? 0;
+        if (maxQty == 0 || existing.itemQuantity < maxQty) {
+          existing.itemQuantity += 1;
+          _productCartMap.update(key, (value) => existing);
         }
-        _productCartMap.update(cartItem.id!, (value) => cartItem);
-        _updateCartLength();
       } else {
-        _productCartMap.putIfAbsent(cartItem.id.toString(), () => cartItem);
-        _updateCartLength();
+        final int maxQty = cartItem.qty ?? 0;
+        if (maxQty == 0 || cartItem.itemQuantity <= maxQty) {
+          _productCartMap.putIfAbsent(key, () => cartItem);
+        }
       }
+      _updateCartLength();
     } catch (e) {
       print('Error adding to data in viewModel: $e');
     }

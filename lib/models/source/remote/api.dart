@@ -1,13 +1,14 @@
 import 'package:dio/dio.dart';
 import 'package:holmon/models/dto/product.dart';
+import 'package:holmon/models/dto/product_page.dart';
 
 import '../../../constants/appConstants.dart';
 
 abstract class Api {
   //interface is depend on your api endpoints, your needs...etc
   Api(String appBaseUrl);
-  Future<List<Product>> loadProductList({required int page});
-  Future<Product> loadProductById({required BigInt id});
+  Future<ProductPage> loadProductList({required int page});
+  Future<Product> loadProductById({required String id});
 }
 
 //Implemntaion depend on your api documentaion
@@ -19,29 +20,59 @@ class ApiImpl implements Api {
   ApiImpl(this.appBaseUrl) : dio = Dio(BaseOptions(baseUrl: appBaseUrl));
 
   @override
-  Future<List<Product>> loadProductList({required int page}) async {
+  Future<ProductPage> loadProductList({required int page}) async {
     try {
       Response response;
       dio.options.headers.addAll({
         'Authorization': AppConstants.authToken,
       });
-      response = await dio.get(appBaseUrl + AppConstants.fetchAllProdList, queryParameters: {'per_page': 10}, );
+      // Backend returns Laravel-style pagination at /product
+      response = await dio.get(
+        appBaseUrl + AppConstants.fetchAllProdList,
+        queryParameters: {
+          'page': page,
+          'per_page': 10,
+        },
+      );
       print("responseresponse =>>>>${response}");
 
       dio.interceptors
           .add(LogInterceptor(requestBody: true, responseBody: true));
 
-      final l = (response.data['products'] as List)
-          .map((e) => Product.fromMap(e))
-          .where((element) =>
-              element.imagefrontsmallurl != null &&
-              element.imagefronturl != null &&
-              element.productname != null &&
-              element.id != null &&
-              element.productname!.isNotEmpty)
+      // New response structure: { success, message, data: { data: [ ...products ] , ... } }
+      final dynamic root = response.data;
+      final dynamic dataNode = root is Map ? root['data'] : null;
+      final List<dynamic> listNode =
+          (dataNode is Map && dataNode['data'] is List) ? dataNode['data'] as List : <dynamic>[];
+
+      final l = listNode
+          .map((e) => Product.fromMap(e as Map<String, dynamic>))
+          .where((element) => element.productname != null && element.id != null)
           .toList();
       print("api return " + l.toString());
-      return l;
+      final int currentPage = (dataNode is Map && dataNode['current_page'] is int)
+          ? dataNode['current_page'] as int
+          : page;
+      final int lastPage = (dataNode is Map && dataNode['last_page'] is int)
+          ? dataNode['last_page'] as int
+          : page;
+      final int? from = (dataNode is Map && dataNode['from'] is int)
+          ? dataNode['from'] as int
+          : null;
+      final int? to = (dataNode is Map && dataNode['to'] is int)
+          ? dataNode['to'] as int
+          : null;
+      final int? total = (dataNode is Map && dataNode['total'] is int)
+          ? dataNode['total'] as int
+          : null;
+      return ProductPage(
+        items: l,
+        currentPage: currentPage,
+        lastPage: lastPage,
+        from: from,
+        to: to,
+        total: total,
+      );
     } on DioException catch (e) {
       // The request was made and the server responded with a status code
       // that falls out of the range of 2xx and is also not 304.
@@ -51,7 +82,9 @@ class ApiImpl implements Api {
         print(e.response?.requestOptions);
 
         //  API responds with 404 when reached the end
-        if (e.response?.statusCode == 404) return [];
+        if (e.response?.statusCode == 404) {
+          return ProductPage(items: [], currentPage: page, lastPage: page);
+        }
       } else {
         // Something happened in setting up or sending the request that triggered an Error
         print(e.requestOptions);
@@ -59,26 +92,26 @@ class ApiImpl implements Api {
       }
     }
 
-    return [];
+    return ProductPage(items: [], currentPage: page, lastPage: page);
   }
 
   @override
-  Future<Product> loadProductById({required BigInt id}) async {
+  Future<Product> loadProductById({required String id}) async {
     try {
       Response response;
-      response = await dio.get(appBaseUrl, queryParameters: {'id': id});
+      response = await dio.get(appBaseUrl + AppConstants.fetchAllProdList + '/$id');
 
-      // Assuming 'results' is a list in the response
-      final results = response.data['results'] as List;
-
-      // Assuming 'results' contains a single item
-      if (results.isNotEmpty) {
-        final jsonProduct = results.first;
-        return Product.fromRawJson(jsonProduct);
-      } else {
-        // Return a default or handle the case when 'results' is empty
-        return Product(); // Adjust this line based on your Product class
+      final dynamic root = response.data;
+      // If API returns the product directly
+      if (root is Map && root['id'] != null) {
+        return Product.fromMap(root.cast<String, dynamic>());
       }
+      // Or wrapped inside { data: {...} }
+      if (root is Map && root['data'] is Map) {
+        return Product.fromMap((root['data'] as Map).cast<String, dynamic>());
+      }
+      // Fallback
+      throw Exception('Unexpected product by id response');
     } on DioException catch (e) {
       // The request was made and the server responded with a status code
       // that falls out of the range of 2xx and is also not 304.

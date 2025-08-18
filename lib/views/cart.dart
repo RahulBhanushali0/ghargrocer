@@ -91,7 +91,7 @@ class CartScreen extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.only(bottom: 8),
                     child: Text(
-                        "Add more items to meet the 1200da min order value",
+                        "Add more items to meet the 1200₹ min order value",
                         style: TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.bold,
@@ -118,16 +118,16 @@ class CartScreen extends StatelessWidget {
                                 cartViewModel.productCartMap.values.toList();
                             return Text(
                                 cartItemList.isEmpty
-                                    ? "0.00da"
+                                    ? "0.00₹"
                                     : cartItemList
                                             .map((e) =>
-                                                double.parse((e.price ?? "10da")
-                                                    .replaceAll("da", "")) *
+                                                double.parse((e.price ?? "10₹")
+                                                    .replaceAll("₹", "")) *
                                                 e.itemQuantity)
                                             .reduce((value, element) =>
                                                 value + element)
                                             .toStringAsFixed(2) +
-                                        "da",
+                                        "₹",
                                 style: TextStyle(
                                     fontSize: 16,
                                     color: Colors.red,

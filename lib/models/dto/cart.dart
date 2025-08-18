@@ -12,6 +12,7 @@ class CartItem extends Product {
     required String? quantity,
     required String? price,
     required String? categories,
+    int? qty,
     required this.itemQuantity,
   }) : super(
             id: id,
@@ -20,7 +21,8 @@ class CartItem extends Product {
             productname: productname,
             quantity: quantity,
             price: price,
-            categories: categories);
+            categories: categories,
+            qty: qty);
 
   // ---------------------------------------------------------------------------
   // JSON
@@ -45,6 +47,7 @@ class CartItem extends Product {
       price: json['price'],
       itemQuantity: json['itemQuantity'],
       categories: json['categories'],
+      qty: json['qty'],
     );
   }
   Map<String, dynamic> toMap() {
@@ -57,6 +60,7 @@ class CartItem extends Product {
     data['price'] = price;
     data['itemQuantity'] = itemQuantity;
     data['categories'] = categories;
+    data['qty'] = qty;
     return data;
   }
 }

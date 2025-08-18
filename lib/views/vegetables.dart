@@ -36,11 +36,11 @@ class _VegetablesScreenState extends State<VegetablesScreen> {
       appBar: MyAppBar(
           title: Padding(
             padding: const EdgeInsets.only(right: 16.0),
-            child: SearchTextField(
-              hint: "Search products...",
+            child: Obx(() => SearchTextField(
+              hint: "Search products from ${productViewModel.productList.length} items",
               //argument: _productList,
               readOnly: true,
-            ),
+            )),
           ),
           leading:
               InkResponse(onTap: () => Get.back(), child: BackButtonIcon())),
@@ -105,7 +105,10 @@ class _VegetablesScreenState extends State<VegetablesScreen> {
                           // Customize this part to extract data from your product model
                         },
                         itemCount: _productList.length +
-                            (productViewModel.page.value < 8 ? 1 : 0),
+                            (productViewModel.page.value <
+                                    productViewModel.lastPage.value
+                                ? 1
+                                : 0),
                       ),
                     );
                   } else if (productViewModel.currentState is FailureState) {

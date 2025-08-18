@@ -32,7 +32,7 @@ class CartItemWidget extends StatelessWidget {
                 decoration:
                     BoxDecoration(borderRadius: BorderRadius.circular(50)),
                 child: CachedNetworkImage(
-                  imageUrl: item.imagefrontsmallurl.toString()!,
+                  imageUrl: item.imagefrontsmallurl ?? "",
                   width: 40,
                   height: 40,
                   filterQuality: FilterQuality.none,

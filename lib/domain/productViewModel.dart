@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:holmon/models/dto/product.dart';
+import 'package:holmon/models/dto/product_page.dart';
 import 'package:holmon/models/product_repo_Impl.dart';
 import 'package:holmon/utils/myStates.dart';
 
@@ -20,6 +21,8 @@ class ProductViewModel extends GetxController {
   List<Product> get productList => _productList;
 
   RxInt page = 1.obs;
+  RxInt lastPage = 1.obs;
+  RxBool isFetchingMore = false.obs;
 
   Future<void> logout() async {
     await _secureStorageService.deleteApiToken();
@@ -28,8 +31,10 @@ class ProductViewModel extends GetxController {
 
   Future<void> getAllProductList(int page) async {
     try {
-      final productList =
+      final ProductPage pageData =
           await _productRepository.getAllProductList(page: page);
+      final productList = pageData.items;
+      lastPage.value = pageData.lastPage;
       print("productList =>    ${productList}");
       _currentState.value = LoadingState();
 
@@ -48,7 +53,7 @@ class ProductViewModel extends GetxController {
     }
   }
 
-  Future<void> getProductById(BigInt id) async {
+  Future<void> getProductById(String id) async {
     try {
       // Simulating data loading
       final product = await _productRepository.getProductByid(id: id);
@@ -67,9 +72,11 @@ class ProductViewModel extends GetxController {
     scrollController = ScrollController();
     //getAllProductList(page.value);
     scrollController.addListener(() async {
-      if (scrollController.position.maxScrollExtent ==
+      if (!isFetchingMore.value &&
+          scrollController.position.maxScrollExtent ==
               scrollController.offset &&
-          page.value < 11) {
+          page.value < lastPage.value) {
+        isFetchingMore.value = true;
         // Check if existing data is available
         if (_currentState.value is LoadedState) {
           // If data exists, append new items to the existing list
@@ -77,15 +84,17 @@ class ProductViewModel extends GetxController {
               (_currentState.value as LoadedState).data;
           page.value += 1;
 
-          final newList =
+          final ProductPage pageData =
               await _productRepository.getAllProductList(page: page.value);
+          lastPage.value = pageData.lastPage;
+          final newList = pageData.items;
 
           final updatedList = existingList + newList;
-          //_currentState.value = EmptyDataState();
-          (_currentState.value as LoadedState).data = updatedList.toList();
-          //_currentState.value = LoadedState(updatedList);
+          // Reassign the state so Obx listeners rebuild
+          _currentState.value = LoadedState(updatedList.toList());
           _productList.value = updatedList;
           print("updated list length =>${updatedList.length}");
+          isFetchingMore.value = false;
           return;
         }
       }

@@ -5,7 +5,6 @@ import 'package:holmon/domain/productViewModel.dart';
 import 'package:holmon/models/product_repo_Impl.dart';
 import 'package:holmon/models/shopingCart_repo_impl.dart';
 import 'package:holmon/models/source/local/cart_local_storage.dart';
-import 'package:holmon/models/source/local/product_local_storage.dart';
 import 'package:holmon/models/source/remote/api.dart';
 import 'package:lottie/lottie.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -13,14 +12,11 @@ import 'package:holmon/constants/appConstants.dart';
 
 Future initDependencies() async {
   final sharedPreferences = await SharedPreferences.getInstance();
-  Get.lazyPut(() => LocalStorageImpl(sharedPreferences: sharedPreferences),
-      fenix: true);
 
   Get.lazyPut(() => ApiImpl(AppConstants.BASE_URL), fenix: true);
 
   Get.lazyPut(() => ProductRepositoryImpl(
         api: Get.find<ApiImpl>(),
-        localStorage: Get.find<LocalStorageImpl>(),
       ), fenix: true);
 
   Get.lazyPut(
