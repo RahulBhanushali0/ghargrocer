@@ -1,28 +1,23 @@
 import 'dart:convert';
 
-import 'package:holmon/models/dto/product.dart';
+import 'package:holmon/models/dto/products.dart';
 
 class CartItem extends Product {
   int itemQuantity;
   CartItem({
     required String? id,
-    required String? imagefrontsmallurl,
-    required String? imagefronturl,
-    required String? productname,
-    required String? quantity,
+    required String? name,
     required String? price,
-    required String? categories,
+    required List<Images>? images,
     int? qty,
     required this.itemQuantity,
   }) : super(
-            id: id,
-            imagefrontsmallurl: imagefrontsmallurl,
-            imagefronturl: imagefronturl,
-            productname: productname,
-            quantity: quantity,
-            price: price,
-            categories: categories,
-            qty: qty);
+    id: id,
+    name: name,
+    price: price,
+    qty: qty,
+    images: images,
+  );
 
   // ---------------------------------------------------------------------------
   // JSON
@@ -40,27 +35,27 @@ class CartItem extends Product {
   factory CartItem.fromMap(Map<String, dynamic> json) {
     return CartItem(
       id: json['id'],
-      imagefrontsmallurl: json['image_front_small_url'],
-      imagefronturl: json['imagefronturl'],
-      productname: json['product_name'],
-      quantity: json['quantity'],
+      name: json['name'],
       price: json['price'],
       itemQuantity: json['itemQuantity'],
-      categories: json['categories'],
       qty: json['qty'],
+      images: json['images'] == null
+          ? []
+          : List<Images>.from(
+          (json['images'] as List).map((x) => Images.fromJson(x))),
     );
   }
+
   Map<String, dynamic> toMap() {
     final Map<String, dynamic> data = Map<String, dynamic>();
     data['id'] = id;
-    data['image_front_small_url'] = imagefrontsmallurl;
-    data['imagefronturl'] = imagefronturl;
-    data['product_name'] = productname;
-    data['quantity'] = quantity;
+    data['name'] = name;
     data['price'] = price;
-    data['itemQuantity'] = itemQuantity;
-    data['categories'] = categories;
     data['qty'] = qty;
+    data['itemQuantity'] = itemQuantity;
+    data['images'] = images == null
+        ? []
+        : List<dynamic>.from(images!.map((x) => x.toJson()));
     return data;
   }
 }

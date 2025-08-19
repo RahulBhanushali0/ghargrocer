@@ -70,13 +70,10 @@ class CartLocalStorageImpl implements CartLocalStorage {
             (element) => element.id == cartItemId.toString(),
             orElse: () => CartItem(
                 id: "",
-                imagefrontsmallurl: "",
-                imagefronturl: "",
-                productname: "",
+                name: "",
                 itemQuantity: 0,
-                quantity: '',
                 price: '',
-                categories: ''));
+                qty: 0, images: []));
       } catch (e) {
         return null;
       }

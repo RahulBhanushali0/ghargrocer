@@ -28,7 +28,6 @@ class _DashboardScreenState extends State<DashboardScreen>
   @override
   void initState() {
     super.initState();
-    productViewModel.getAllCategoryList();
   }
 
   @override

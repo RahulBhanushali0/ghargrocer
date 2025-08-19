@@ -105,7 +105,7 @@ class Product {
   String? unitValue;
   String? price;
   String? oldPrice;
-  List<Image>? images;
+  List<Images>? images;
   bool? featured;
   List<dynamic>? productDiscounts;
   bool? backorder;
@@ -144,7 +144,7 @@ class Product {
     unitValue: json["unit_value"],
     price: json["price"],
     oldPrice: json["old_price"],
-    images: json["images"] == null ? [] : List<Image>.from(json["images"]!.map((x) => Image.fromJson(x))),
+    images: json["images"] == null ? [] : List<Images>.from(json["images"]!.map((x) => Images.fromJson(x))),
     featured: json["featured"],
     productDiscounts: json["product_discounts"] == null ? [] : List<dynamic>.from(json["product_discounts"]!.map((x) => x)),
     backorder: json["backorder"],
@@ -174,6 +174,16 @@ class Product {
     "brand": brand?.toJson(),
     "categories": categories == null ? [] : List<dynamic>.from(categories!.map((x) => x.toJson())),
   };
+  factory Product.fromMap(Map<String, dynamic> map) {
+    return Product.fromJson(map);
+  }
+  factory Product.fromRawJson(String str) {
+    return Product.fromJson(json.decode(str));
+  }
+  String toRawJson() {
+    return json.encode(this.toJson());
+  }
+
 }
 
 class Brand {
@@ -232,14 +242,14 @@ class Category {
   };
 }
 
-class Image {
+class Images {
   String? image;
 
-  Image({
+  Images({
     this.image,
   });
 
-  factory Image.fromJson(Map<String, dynamic> json) => Image(
+  factory Images.fromJson(Map<String, dynamic> json) => Images(
     image: json["image"],
   );
 

@@ -1,8 +1,9 @@
-import 'package:holmon/models/dto/product.dart';
+
 import 'package:holmon/models/source/remote/api.dart';
 import 'package:holmon/models/dto/product_page.dart';
 
 import 'dto/categoryPage.dart';
+import 'dto/products.dart';
 
 class ProductRepositoryImpl implements ProductRepository {
   final Api _api;
@@ -18,12 +19,6 @@ class ProductRepositoryImpl implements ProductRepository {
   }
 
   @override
-  Future<CategoryPage> getAllCategoryList() async {
-    final fetched = await _api.loadCategoryList();
-    return fetched;
-  }
-
-  @override
   Future<Product?> getProductByid({required String id}) async {
     final fetchedProduct = await _api.loadProductById(id: id);
     return fetchedProduct;
@@ -32,6 +27,5 @@ class ProductRepositoryImpl implements ProductRepository {
 
 abstract class ProductRepository {
   Future<ProductPage> getAllProductList({required int page});
-  Future<CategoryPage> getAllCategoryList();
   Future<Product?> getProductByid({required String id});
 }

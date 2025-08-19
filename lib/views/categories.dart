@@ -4,11 +4,11 @@ import 'package:get/get.dart';
 import 'package:holmon/domain/categorieViewModel.dart';
 import 'package:holmon/domain/productViewModel.dart';
 import 'package:holmon/models/dto/categorie.dart';
-import 'package:holmon/models/dto/product.dart';
 import 'package:holmon/utils/myStates.dart';
 import 'package:holmon/utils/dimensions.dart';
 import 'package:holmon/views/common_widgets/appBar.dart';
 
+import '../models/dto/products.dart';
 import 'common_widgets/search_text_field.dart';
 
 class Categories extends StatefulWidget {
@@ -96,7 +96,7 @@ class _CategoriesState extends State<Categories>
                             return ExpansionTile(
                                 shape: Border.all(color: Colors.transparent),
                                 title: Text(
-                                  product.productname.toString(),
+                                  product.name.toString(),
                                   style: TextStyle(fontSize: 14),
                                 ),
                                 children: [
@@ -117,7 +117,9 @@ class _CategoriesState extends State<Categories>
                                               BorderRadius.circular(50),
                                         ),
                                         child: CachedNetworkImage(
-                                          imageUrl: product.imagefrontsmallurl ?? "",
+                                          imageUrl: (product.images != null && product.images!.isNotEmpty && product.images!.first.image != null)
+                                              ? "https://ghargrocer.com/storage/${product.images!.first.image}"
+                                              : "",
                                           width: 40,
                                           height: 40,
                                           filterQuality: FilterQuality.none,

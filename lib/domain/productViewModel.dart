@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'package:holmon/models/dto/product.dart';
 import 'package:holmon/models/dto/product_page.dart';
 import 'package:holmon/models/product_repo_Impl.dart';
 import 'package:holmon/utils/myStates.dart';
 
 import '../models/dto/categoryPage.dart';
+import '../models/dto/products.dart';
 import '../services/secure_storage_service.dart';
 
 class ProductViewModel extends GetxController {
@@ -54,30 +54,6 @@ class ProductViewModel extends GetxController {
     }
   }
 
-  Future<void> getAllCategoryList() async {
-    try {
-      final CategoryPage categoryData =
-      await _productRepository.getAllCategoryList();
-      print("categoryDatacategoryData ${categoryData.id}");
-      // final productList = pageData.items;
-      // lastPage.value = pageData.lastPage;
-      // print("productList =>    ${productList}");
-      // _currentState.value = LoadingState();
-
-      // if (productList.isEmpty) {
-      //   // Set state to EmptyDataState if the result is empty
-      //   _currentState.value = FailureState('Data is empty');
-      // } else {
-      //   // Update state to LoadedState with data
-      //   _currentState.value = LoadedState(productList);
-      //   _productList.value = productList;
-      // }
-    } catch (e) {
-      print('Error fetching data in viewModel: $e');
-      // Update state to FailureState with error message
-      _currentState.value = FailureState('An error occurred');
-    }
-  }
 
   Future<void> getProductById(String id) async {
     try {

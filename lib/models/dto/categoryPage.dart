@@ -1,4 +1,5 @@
-import 'package:holmon/models/dto/product.dart';
+
+import 'package:holmon/models/dto/products.dart';
 
 class CategoryPage {
   List<Product>? items;

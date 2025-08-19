@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:holmon/constants/assets.dart';
 import 'package:holmon/domain/productViewModel.dart';
-import 'package:holmon/models/dto/product.dart';
 import 'package:holmon/utils/myStates.dart';
 import 'package:holmon/views/common_widgets/vegetable_card.dart';
+
+import '../../models/dto/products.dart';
 
 class HorizontalProductList extends StatefulWidget {
   final int page;

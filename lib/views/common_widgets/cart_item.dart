@@ -32,7 +32,9 @@ class CartItemWidget extends StatelessWidget {
                 decoration:
                     BoxDecoration(borderRadius: BorderRadius.circular(50)),
                 child: CachedNetworkImage(
-                  imageUrl: item.imagefrontsmallurl ?? "",
+                  imageUrl: (item.images != null && item.images!.isNotEmpty && item.images!.first.image != null)
+                      ? "https://ghargrocer.com/storage/${item.images!.first.image.toString()}"
+                      : "",
                   width: 40,
                   height: 40,
                   filterQuality: FilterQuality.none,
@@ -51,7 +53,7 @@ class CartItemWidget extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    item.productname ?? "????",
+                    item.name ?? "????",
                     style: TextStyle(
                         overflow: TextOverflow.ellipsis,
                         fontSize: 14,
@@ -60,7 +62,7 @@ class CartItemWidget extends StatelessWidget {
                   SizedBox(
                     height: 8,
                   ),
-                  Text("${item.price ?? "10da"} / ${item.quantity}",
+                  Text("${item.price}₹ / ${item.qty}",
                       style: TextStyle(
                           color: Color(0xffFF324B),
                           fontSize: 14,

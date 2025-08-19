@@ -1,10 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:holmon/constants/assets.dart';
 import 'package:holmon/domain/cartViewModel.dart';
 import 'package:holmon/models/dto/cart.dart';
-import 'package:holmon/models/dto/product.dart';
+
+import '../../models/dto/products.dart';
 
 class VegetableCardWidget extends StatelessWidget {
   final Product product;
@@ -17,7 +19,6 @@ class VegetableCardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(product.imagefrontsmallurl);
     return Material(
       //color: Get.theme.cardColor,
       child: Container(
@@ -37,7 +38,9 @@ class VegetableCardWidget extends StatelessWidget {
                   child: Hero(
                     tag: product.id!,
                     child: CachedNetworkImage(
-                      imageUrl: "https://ghargrocer.com/storage/${product.imagefrontsmallurl}" ?? "",
+                      imageUrl: (product.images != null && product.images!.isNotEmpty && product.images!.first.image != null)
+                          ? "https://ghargrocer.com/storage/${product.images!.first.image}"
+                          : "",
                       width: 120,
                       height: 120,
                       filterQuality: FilterQuality.none,
@@ -63,7 +66,7 @@ class VegetableCardWidget extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Text(
-                      product.regularPrice ?? "20da",
+                      product.price ?? "20da",
                       style: TextStyle(
                           decoration: TextDecoration.lineThrough,
                           color: Get.theme.colorScheme.primary,
@@ -74,7 +77,7 @@ class VegetableCardWidget extends StatelessWidget {
                       width: 8,
                     ),
                     Text(
-                      product.discount ?? "",
+                      product.productDiscounts.toString() ?? "",
                       style: TextStyle(
                           color: Color.fromARGB(255, 27, 133, 185),
                           fontSize: 10,
@@ -85,7 +88,7 @@ class VegetableCardWidget extends StatelessWidget {
                 Container(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    product.productname ?? "????",
+                    product.name ?? "????",
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
                       color: Colors.black,
@@ -128,7 +131,7 @@ class VegetableCardWidget extends StatelessWidget {
                 padding: EdgeInsets.all(8),
                 child: Column(
                   children: [
-                    Text(product.discount ?? "20%",
+                    Text(product.productDiscounts.toString() ?? "20%",
                         style: TextStyle(
                             fontSize: 8,
                             fontWeight: FontWeight.bold,
@@ -192,14 +195,11 @@ class VegetableCardWidget extends StatelessWidget {
         onTap: () {
           cartViewModel.addToCart(CartItem(
             id: product.id,
-            productname: product.productname,
-            quantity: product.quantity,
+            name: product.name,
             price: product.price,
             itemQuantity: 1,
-            imagefrontsmallurl: product.imagefrontsmallurl,
-            imagefronturl: product.imagefronturl,
-            categories: product.categories,
             qty: product.qty,
+            images: product.images
           ));
         },
         child: Image.asset(

@@ -4,9 +4,9 @@ import 'package:holmon/views/common_widgets/loading_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:holmon/domain/productViewModel.dart';
-import 'package:holmon/models/dto/product.dart';
 import 'package:holmon/utils/myStates.dart';
 import 'package:holmon/views/common_widgets/search_text_field.dart';
+import '../models/dto/products.dart';
 import 'common_widgets/vegetable_card.dart';
 
 class VegetablesScreen extends StatefulWidget {

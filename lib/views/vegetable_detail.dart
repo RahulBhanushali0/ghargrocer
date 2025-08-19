@@ -4,12 +4,12 @@ import 'package:get/get.dart';
 import 'package:holmon/constants/assets.dart';
 import 'package:holmon/domain/cartViewModel.dart';
 import 'package:holmon/models/dto/cart.dart';
-import 'package:holmon/models/dto/product.dart';
 import 'package:holmon/views/common_widgets/appBar.dart';
 import 'package:holmon/views/common_widgets/search_text_field.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 
+import '../models/dto/products.dart';
 import 'common_widgets/item_key_points_view.dart';
 
 class VegetableDetailScreen extends StatefulWidget {
@@ -31,10 +31,10 @@ class _VegetableDetailScreenState extends State<VegetableDetailScreen> {
     super.initState();
 
     multiImageProvider = [
-      if ((product.imagefronturl ?? '').isNotEmpty)
-        CachedNetworkImageProvider("https://ghargrocer.com/storage/${product.imagefrontsmallurl}"),
-      if ((product.imagenutritionurl ?? '').isNotEmpty)
-        CachedNetworkImageProvider("https://ghargrocer.com/storage/${product.imagefrontsmallurl}"),
+      if (product.images!.isNotEmpty)
+        CachedNetworkImageProvider("https://ghargrocer.com/storage/${product.images}"),
+      if (product.images!.isNotEmpty)
+        CachedNetworkImageProvider("https://ghargrocer.com/storage/${product.images}"),
     ];
   }
 
@@ -110,7 +110,9 @@ class _VegetableDetailScreenState extends State<VegetableDetailScreen> {
                         child: Hero(
                           tag: product.id!,
                           child: CachedNetworkImage(
-                            imageUrl: "https://ghargrocer.com/storage/${product.imagefrontsmallurl}" ?? "",
+                            imageUrl: (product.images != null && product.images!.isNotEmpty && product.images!.first.image != null)
+                                ? "https://ghargrocer.com/storage/${product.images!.first.image}"
+                                : "",
                             width: 140,
                             height: 180,
                             filterQuality: FilterQuality.low,
@@ -131,7 +133,7 @@ class _VegetableDetailScreenState extends State<VegetableDetailScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "${product.price ?? 10.00} / ${product.quantity}",
+                          "${product.price ?? 10.00} / ${product.qty}",
                           style: TextStyle(
                             color: Color(0xffFF324B),
                             fontSize: 20,
@@ -142,7 +144,7 @@ class _VegetableDetailScreenState extends State<VegetableDetailScreen> {
                           height: 14,
                         ),
                         Text(
-                          product.productname ?? "????",
+                          product.name ?? "????",
                           style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.normal,
@@ -152,7 +154,7 @@ class _VegetableDetailScreenState extends State<VegetableDetailScreen> {
                           height: 14,
                         ),
                         Text(
-                          "Quantity : ${product.quantity}",
+                          "Quantity : ${product.qty}",
                           style: TextStyle(
                             color: Get.theme.primaryColor,
                             fontSize: 14,
@@ -200,7 +202,7 @@ class _VegetableDetailScreenState extends State<VegetableDetailScreen> {
                             ItemKeyPointsView(
                                 imagePath: Assets.imagesCalories,
                                 title: "80 kcal",
-                                desc: product.quantity ?? "200 Gram")
+                                desc: product.qty.toString() ?? "200 Gram")
                           ],
                         ),
                         SizedBox(
@@ -274,14 +276,11 @@ class _VegetableDetailScreenState extends State<VegetableDetailScreen> {
       onPressed: () => {
         cartViewModel.addToCart(CartItem(
           id: product.id,
-          productname: product.productname,
+          name: product.name,
           price: product.price,
-          quantity: product.quantity,
           itemQuantity: 1,
-          imagefrontsmallurl: product.imagefrontsmallurl,
-          imagefronturl: product.imagefronturl,
-          categories: product.categories,
           qty: product.qty,
+          images: product.images
         ))
       },
       style: TextButton.styleFrom(

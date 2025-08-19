@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
-import 'package:holmon/models/dto/product.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../dto/products.dart';
 
 const cachedCharacterListKey = 'CACHED_CHARACTER_LIST_PAGE';
 const cachedProductKey = 'CACHED_PRODUCT';

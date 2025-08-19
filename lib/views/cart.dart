@@ -59,6 +59,7 @@ class CartScreen extends StatelessWidget {
                         },
                         itemCount: cartViewModel.productCartMap.length,
                         itemBuilder: (context, index) {
+                          // print(cartItemList[index].toJson());
                           return CartItemWidget(
                             item: cartItemList[index],
                           );
