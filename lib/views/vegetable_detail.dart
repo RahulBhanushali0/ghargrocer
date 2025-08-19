@@ -32,9 +32,9 @@ class _VegetableDetailScreenState extends State<VegetableDetailScreen> {
 
     multiImageProvider = [
       if ((product.imagefronturl ?? '').isNotEmpty)
-        CachedNetworkImageProvider(product.imagefronturl!),
+        CachedNetworkImageProvider("https://ghargrocer.com/storage/${product.imagefrontsmallurl}"),
       if ((product.imagenutritionurl ?? '').isNotEmpty)
-        CachedNetworkImageProvider(product.imagenutritionurl!),
+        CachedNetworkImageProvider("https://ghargrocer.com/storage/${product.imagefrontsmallurl}"),
     ];
   }
 
@@ -70,45 +70,47 @@ class _VegetableDetailScreenState extends State<VegetableDetailScreen> {
                 children: [
                   InkResponse(
                     onTap: () => {
-                      Get.to(() => PhotoViewGallery.builder(
-                            scrollPhysics: const BouncingScrollPhysics(),
-                            builder: (BuildContext context, int index) {
-                              return PhotoViewGalleryPageOptions(
-                                maxScale: PhotoViewComputedScale.covered * 1.1,
-                                minScale:
-                                    PhotoViewComputedScale.contained * 0.8,
-                                imageProvider: multiImageProvider[index],
-                                initialScale:
-                                    PhotoViewComputedScale.contained * 0.8,
-                                heroAttributes: PhotoViewHeroAttributes(
-                                    tag: product.id ?? ""),
-                              );
-                            },
-                            itemCount: multiImageProvider.length,
-                            pageController: PageController(initialPage: 0),
-                          ))
+                      // Get.to(() => PhotoViewGallery.builder(
+                      //       scrollPhysics: const BouncingScrollPhysics(),
+                      //       builder: (BuildContext context, int index) {
+                      //         return PhotoViewGalleryPageOptions(
+                      //           maxScale: PhotoViewComputedScale.covered * 1.1,
+                      //           minScale:
+                      //               PhotoViewComputedScale.contained * 0.8,
+                      //           imageProvider: multiImageProvider[index],
+                      //           initialScale:
+                      //               PhotoViewComputedScale.contained * 0.8,
+                      //           heroAttributes: PhotoViewHeroAttributes(
+                      //               tag: product.id ?? ""),
+                      //         );
+                      //       },
+                      //       itemCount: multiImageProvider.length,
+                      //       pageController: PageController(initialPage: 0),
+                      //     ))
                     },
                     child: Container(
                       width: MediaQuery.of(context).size.width,
-                      padding: EdgeInsets.symmetric(vertical: 8),
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          border: Border(
-                              bottom: BorderSide(
-                                  width: 4, color: Get.theme.primaryColor),
-                              left: BorderSide(
-                                  width: 4, color: Get.theme.primaryColor),
-                              right: BorderSide(
-                                  width: 4, color: Get.theme.primaryColor)),
-                          borderRadius: BorderRadius.vertical(
-                              bottom: Radius.elliptical(
-                                  MediaQuery.of(context).size.width, 140.0))),
+                      // padding: EdgeInsets.symmetric(vertical: 8),
+                      // decoration: BoxDecoration(
+                      //     color: Colors.white,
+                      //     // border: Border(
+                      //     //     bottom: BorderSide(
+                      //     //         width: 4, color: Get.theme.primaryColor),
+                      //     //     left: BorderSide(
+                      //     //         width: 4, color: Get.theme.primaryColor),
+                      //     //     right: BorderSide(
+                      //     //         width: 4, color: Get.theme.primaryColor)),
+                      //     borderRadius: BorderRadius.vertical(
+                      //         bottom: Radius.elliptical(
+                      //             MediaQuery.of(context).size.width, 140.0))
+                      //
+                      // ),
                       child: Padding(
                         padding: const EdgeInsets.symmetric(vertical: 16.0),
                         child: Hero(
                           tag: product.id!,
                           child: CachedNetworkImage(
-                            imageUrl: product.imagefronturl ?? "",
+                            imageUrl: "https://ghargrocer.com/storage/${product.imagefrontsmallurl}" ?? "",
                             width: 140,
                             height: 180,
                             filterQuality: FilterQuality.low,

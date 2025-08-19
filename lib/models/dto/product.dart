@@ -1,4 +1,4 @@
-/* 
+/*
 // Example Usage
 Map<String, dynamic> map = jsonDecode(<myJSONString>);
 var myRootNode = Root.fromJson(map);
@@ -14,6 +14,7 @@ class Product {
   String? imagenutritionurl;
   String? manufacturingplaces;
   String? productname;
+  String? slug;
   String? quantity;
   String? stores;
   final String? price;
@@ -29,6 +30,7 @@ class Product {
       this.imagenutritionurl,
       this.manufacturingplaces,
       this.productname,
+      this.slug,
       this.quantity,
       this.stores,
       this.price,
@@ -52,6 +54,7 @@ class Product {
     // id, name, slug, qty, unit, unit_value, price, old_price, images, ... , categories: List<{ name, ... }>
     final String? id = json['id']?.toString();
     final String? name = json['name']?.toString();
+    final String? slug = json['slug']?.toString();
     final String? unit = json['unit']?.toString();
     final String? unitValue = json['unit_value']?.toString();
     final String? price = json['price']?.toString();
@@ -127,6 +130,7 @@ class Product {
       imagenutritionurl: json['image_nutrition_url'],
       manufacturingplaces: json['manufacturing_places'],
       productname: name ?? json['product_name'],
+      slug: slug ?? json['slug'],
       quantity: composedQuantity,
       stores: json['stores'],
       price: price ??
@@ -147,6 +151,7 @@ class Product {
     data['image_nutrition_url'] = imagenutritionurl;
     data['manufacturing_places'] = manufacturingplaces;
     data['product_name'] = productname;
+    data['slug'] = slug;
     data['quantity'] = quantity;
     data['stores'] = stores;
     data['price'] = price ??

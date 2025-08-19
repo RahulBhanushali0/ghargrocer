@@ -17,6 +17,7 @@ class VegetableCardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print(product.imagefrontsmallurl);
     return Material(
       //color: Get.theme.cardColor,
       child: Container(
@@ -36,7 +37,7 @@ class VegetableCardWidget extends StatelessWidget {
                   child: Hero(
                     tag: product.id!,
                     child: CachedNetworkImage(
-                      imageUrl: product.imagefrontsmallurl ?? "",
+                      imageUrl: "https://ghargrocer.com/storage/${product.imagefrontsmallurl}" ?? "",
                       width: 120,
                       height: 120,
                       filterQuality: FilterQuality.none,

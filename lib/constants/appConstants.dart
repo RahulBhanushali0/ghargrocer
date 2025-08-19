@@ -11,5 +11,5 @@ class AppConstants {
   static const String authToken = 'Bearer HenilCode'; // Replace with your actual token if it changes
   static const String verifyOtpEndpoint = '/verify_otp';
   static const String fetchAllProdList = '/product';
-
+  static const String fetchAllCategoryList = '/category';
 }
