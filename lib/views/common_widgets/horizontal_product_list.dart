@@ -5,6 +5,7 @@ import 'package:holmon/domain/productViewModel.dart';
 import 'package:holmon/utils/myStates.dart';
 import 'package:holmon/views/common_widgets/vegetable_card.dart';
 
+import '../../domain/categorieViewModel.dart';
 import '../../models/dto/products.dart';
 
 class HorizontalProductList extends StatefulWidget {
@@ -22,10 +23,12 @@ class HorizontalProductList extends StatefulWidget {
 
 class _HorizontalProductListState extends State<HorizontalProductList> {
   final ProductViewModel productViewModel = Get.find<ProductViewModel>();
+  // final CategorieViewModel categorieViewModel = Get.find<CategorieViewModel>();
   @override
   void initState() {
     super.initState();
     productViewModel.getAllProductList(widget.page);
+    // categorieViewModel.getAllCategoryList(1);
   }
 
   @override

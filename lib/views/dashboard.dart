@@ -6,11 +6,17 @@ import 'package:holmon/domain/productViewModel.dart';
 import 'package:holmon/utils/myTheme.dart';
 import 'package:holmon/views/common_widgets/appBar.dart';
 import 'package:holmon/views/common_widgets/dropDownHomeMenu.dart';
+import '../domain/categorieViewModel.dart';
+import '../models/dto/categoryPage.dart';
+import '../utils/myStates.dart';
 import 'common_widgets/carousel.dart';
 import 'package:get/get.dart';
 import 'common_widgets/categories_view.dart';
 import 'common_widgets/horizontal_product_list.dart';
 import 'common_widgets/see_all_view.dart';
+import 'common_widgets/vegetable_card.dart';
+import '../domain/brandViewModel.dart';
+import '../models/dto/brandList.dart';
 
 class DashboardScreen extends StatefulWidget {
   DashboardScreen({Key? key}) : super(key: key);
@@ -22,12 +28,16 @@ class DashboardScreen extends StatefulWidget {
 class _DashboardScreenState extends State<DashboardScreen>
     with AutomaticKeepAliveClientMixin {
   final ProductViewModel productViewModel = Get.find<ProductViewModel>();
+  final CategorieViewModel categorieViewModel = Get.find<CategorieViewModel>();
+  final BrandViewModel brandViewModel = Get.find<BrandViewModel>();
   @override
   bool get wantKeepAlive => true;
 
   @override
   void initState() {
     super.initState();
+    categorieViewModel.getAllCategoryList(1);
+    brandViewModel.getAllBrandList(1);
   }
 
   @override
@@ -152,6 +162,76 @@ class _DashboardScreenState extends State<DashboardScreen>
           Padding(
               padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
               child: Carousel()),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8),
+            child: Obx(() {
+              final state = brandViewModel.currentState;
+              if (state is LoadingState) {
+                return Center(child: CircularProgressIndicator());
+              } else if (state is LoadedState) {
+                final List<Brand> brands = state.data;
+                if (brands.isEmpty) {
+                  return Center(child: Text('No brands found'));
+                }
+                return SizedBox(
+                  height: 120,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: brands.length,
+                    itemBuilder: (context, index) {
+                      final brand = brands[index];
+                      return InkWell(
+                        onTap: (){
+
+                        },
+                        child: Container(
+                          width: 90,
+                          margin: EdgeInsets.symmetric(horizontal: 8),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(40),
+                                child: brand.image != null && brand.image!.isNotEmpty
+                                    ? Image.network(
+                                        // brand.image!,
+                                  "https://ghargrocer.com/storage/${brand.image!}",
+                                        width: 60,
+                                        height: 60,
+                                        fit: BoxFit.cover,
+                                      )
+                                    : Container(
+                                        width: 60,
+                                        height: 60,
+                                        color: Colors.grey[300],
+                                        child: Icon(Icons.image, size: 30),
+                                      ),
+                              ),
+                              SizedBox(height: 8),
+                              Container(
+                                height: 50,
+                                child: Text(
+                                  brand.name ?? '',
+                                  style: TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
+                                  textAlign: TextAlign.center,
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                );
+              } else if (state is FailureState) {
+                return Center(child: Text(state.error));
+              } else {
+                return SizedBox.shrink();
+              }
+            }),
+          ),
           Column(
             children: [
               SizedBox(
@@ -246,6 +326,59 @@ class _DashboardScreenState extends State<DashboardScreen>
               ),
             ],
           ),
+          Obx(() {
+            final state = categorieViewModel.currentState;
+            if (state is LoadingState) {
+              return Center(child: CircularProgressIndicator());
+            } else if (state is LoadedState) {
+              // List<Datum> from categoryPage.dart
+              final List<Datum> categories = state.data;
+              return Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: categories.map((category) {
+                    if (category.products == null || category.products!.isEmpty) {
+                      return SizedBox.shrink();
+                    }
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8),
+                          child: Text(
+                            category.name ?? '',
+                            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 220,
+
+                          child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: category.products!.length,
+                            itemBuilder: (context, index) {
+                              final product = category.products![index];
+                              return Row(children: [
+                                VegetableCardWidget(product: product),
+                                SizedBox(
+                                  width: 8,
+                                )
+                              ],);
+                            },
+                          ),
+                        ),
+                      ],
+                    );
+                  }).toList(),
+                ),
+              );
+            } else if (state is FailureState) {
+              return Center(child: Text(state.error));
+            } else {
+              return SizedBox.shrink();
+            }
+          }),
         ]),
       ),
     );

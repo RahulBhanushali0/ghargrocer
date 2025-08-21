@@ -4,22 +4,22 @@
 
 import 'dart:convert';
 
-CategoryList categoryListFromJson(String str) => CategoryList.fromJson(json.decode(str));
+ProductList ProductListFromJson(String str) => ProductList.fromJson(json.decode(str));
 
-String categoryListToJson(CategoryList data) => json.encode(data.toJson());
+String ProductListToJson(ProductList data) => json.encode(data.toJson());
 
-class CategoryList {
+class ProductList {
   bool? success;
   String? message;
   Data? data;
 
-  CategoryList({
+  ProductList({
     this.success,
     this.message,
     this.data,
   });
 
-  factory CategoryList.fromJson(Map<String, dynamic> json) => CategoryList(
+  factory ProductList.fromJson(Map<String, dynamic> json) => ProductList(
     success: json["success"],
     message: json["message"],
     data: json["data"] == null ? null : Data.fromJson(json["data"]),

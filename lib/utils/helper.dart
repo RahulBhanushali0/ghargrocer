@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:holmon/domain/cartViewModel.dart';
 import 'package:holmon/domain/categorieViewModel.dart';
 import 'package:holmon/domain/productViewModel.dart';
+import 'package:holmon/domain/brandViewModel.dart';
 import 'package:holmon/models/product_repo_Impl.dart';
 import 'package:holmon/models/shopingCart_repo_impl.dart';
 import 'package:holmon/models/source/local/cart_local_storage.dart';
@@ -36,7 +37,9 @@ Future initDependencies() async {
       cartRepositoryImpl: Get.find<CartRepositoryImpl>()),
       permanent: true);
 
-  Get.put(CategorieViewModel());
+  Get.put(CategorieViewModel(productRepositoryImpl: Get.find<ProductRepositoryImpl>()));
+
+  Get.lazyPut(() => BrandViewModel(productRepositoryImpl: Get.find<ProductRepositoryImpl>()), fenix: true);
 
   //Get.put(SearchViewModel());
 

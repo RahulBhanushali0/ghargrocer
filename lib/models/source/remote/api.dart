@@ -4,12 +4,15 @@ import 'package:holmon/models/dto/product_page.dart';
 import '../../../constants/appConstants.dart';
 import '../../dto/categoryPage.dart';
 import '../../dto/products.dart';
+import '../../dto/brandList.dart';
 
 abstract class Api {
   //interface is depend on your api endpoints, your needs...etc
   Api(String appBaseUrl);
   Future<ProductPage> loadProductList({required int page});
   Future<Product> loadProductById({required String id});
+  Future<CategoryList> loadCategoryList({required int page});
+  Future<BrandList> loadBrandList({required int page});
 }
 
 //Implemntaion depend on your api documentaion
@@ -97,6 +100,38 @@ class ApiImpl implements Api {
   }
 
   @override
+  Future<CategoryList> loadCategoryList({required int page}) async {
+    try {
+      Response response;
+      dio.options.headers.addAll({
+        'Authorization': AppConstants.authToken,
+      });
+      response = await dio.get(
+        appBaseUrl + AppConstants.fetchAllCategoryList,
+        queryParameters: {
+          'page': page,
+          'per_page': 10,
+        },
+      );
+      final dynamic root = response.data;
+      return CategoryList.fromJson(root);
+    } on DioException catch (e) {
+      if (e.response != null) {
+        print(e.response?.data);
+        print(e.response?.headers);
+        print(e.response?.requestOptions);
+        if (e.response?.statusCode == 404) {
+          return CategoryList(); // Return empty or handle as needed
+        }
+      } else {
+        print(e.requestOptions);
+        print(e.message);
+      }
+      return CategoryList(); // Return empty or handle as needed
+    }
+  }
+
+  @override
   Future<Product> loadProductById({required String id}) async {
     try {
       Response response;
@@ -134,7 +169,37 @@ class ApiImpl implements Api {
     throw UnimplementedError();
   }
 
-
+  @override
+  Future<BrandList> loadBrandList({required int page}) async {
+    try {
+      Response response;
+      dio.options.headers.addAll({
+        'Authorization': AppConstants.authToken,
+      });
+      response = await dio.get(
+        appBaseUrl + '/brand',
+        queryParameters: {
+          'page': page,
+          'per_page': 10,
+        },
+      );
+      final dynamic root = response.data;
+      return BrandList.fromJson(root);
+    } on DioException catch (e) {
+      if (e.response != null) {
+        print(e.response?.data);
+        print(e.response?.headers);
+        print(e.response?.requestOptions);
+        if (e.response?.statusCode == 404) {
+          return BrandList(); // Return empty or handle as needed
+        }
+      } else {
+        print(e.requestOptions);
+        print(e.message);
+      }
+      return BrandList(); // Return empty or handle as needed
+    }
+  }
 
 
 }

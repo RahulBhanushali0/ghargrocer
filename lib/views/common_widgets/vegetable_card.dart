@@ -101,7 +101,7 @@ class VegetableCardWidget extends StatelessWidget {
             ),
           ),
           Positioned(
-            bottom: 48,
+            bottom: 55,
             right: 0,
             child: Padding(
               padding: const EdgeInsets.all(8.0),

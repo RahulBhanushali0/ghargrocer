@@ -1,27 +1,25 @@
 // To parse this JSON data, do
 //
-//     final categoryList = categoryListFromJson(jsonString);
+//     final brandList = brandListFromJson(jsonString);
 
 import 'dart:convert';
 
-import 'package:holmon/models/dto/products.dart';
+BrandList brandListFromJson(String str) => BrandList.fromJson(json.decode(str));
 
-CategoryList categoryListFromJson(String str) => CategoryList.fromJson(json.decode(str));
+String brandListToJson(BrandList data) => json.encode(data.toJson());
 
-String categoryListToJson(CategoryList data) => json.encode(data.toJson());
-
-class CategoryList {
+class BrandList {
   bool? success;
   String? message;
   Data? data;
 
-  CategoryList({
+  BrandList({
     this.success,
     this.message,
     this.data,
   });
 
-  factory CategoryList.fromJson(Map<String, dynamic> json) => CategoryList(
+  factory BrandList.fromJson(Map<String, dynamic> json) => BrandList(
     success: json["success"],
     message: json["message"],
     data: json["data"] == null ? null : Data.fromJson(json["data"]),
@@ -36,7 +34,7 @@ class CategoryList {
 
 class Data {
   int? currentPage;
-  List<Datum>? data;
+  List<Brand>? data;
   String? firstPageUrl;
   int? from;
   int? lastPage;
@@ -67,7 +65,7 @@ class Data {
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
     currentPage: json["current_page"],
-    data: json["data"] == null ? [] : List<Datum>.from(json["data"]!.map((x) => Datum.fromJson(x))),
+    data: json["data"] == null ? [] : List<Brand>.from(json["data"]!.map((x) => Brand.fromJson(x))),
     firstPageUrl: json["first_page_url"],
     from: json["from"],
     lastPage: json["last_page"],
@@ -98,34 +96,27 @@ class Data {
   };
 }
 
-
-class Datum {
+class Brand {
   String? id;
   String? name;
   String? slug;
-  dynamic image;
+  String? image;
   String? description;
-  List<Product>? products;
-  String? website;
 
-  Datum({
+  Brand({
     this.id,
     this.name,
     this.slug,
     this.image,
     this.description,
-    this.products,
-    this.website,
   });
 
-  factory Datum.fromJson(Map<String, dynamic> json) => Datum(
+  factory Brand.fromJson(Map<String, dynamic> json) => Brand(
     id: json["id"],
     name: json["name"],
     slug: json["slug"],
     image: json["image"],
     description: json["description"],
-    products: json["products"] == null ? [] : List<Product>.from(json["products"]!.map((x) => Product.fromJson(x))),
-    website: json["website"],
   );
 
   Map<String, dynamic> toJson() => {
@@ -134,8 +125,6 @@ class Datum {
     "slug": slug,
     "image": image,
     "description": description,
-    "products": products == null ? [] : List<dynamic>.from(products!.map((x) => x.toJson())),
-    "website": website,
   };
 }
 
